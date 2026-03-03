@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+       https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.31.xsd">
+    <changeSet id="1769518145043-1" author="User (generated)">
+        <createTable tableName="result">
+            <column name="request_id" type="UUID">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="status_code" type="int"/>
+            <column name="message" type="varchar"/>
+            <column name="client_ip" type="varchar"/>
+            <column name="http_method" type="varchar"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
