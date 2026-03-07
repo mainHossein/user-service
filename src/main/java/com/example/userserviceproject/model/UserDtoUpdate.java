@@ -11,7 +11,7 @@ import java.util.Objects;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDtoPost {
+public class UserDtoUpdate {
     private String firstName;
     private String lastName;
     private String email;
@@ -21,7 +21,7 @@ public class UserDtoPost {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        UserDtoPost that = (UserDtoPost) o;
+        UserDtoUpdate that = (UserDtoUpdate) o;
         return Objects.equals(firstName, that.firstName) && Objects.equals(lastName, that.lastName) && Objects.equals(email, that.email) && Objects.equals(phoneNumber, that.phoneNumber) && Objects.equals(birthDate, that.birthDate);
     }
 

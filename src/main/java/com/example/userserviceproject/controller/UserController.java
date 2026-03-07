@@ -5,7 +5,7 @@ import com.example.userserviceproject.entity.MetaData;
 import com.example.userserviceproject.entity.ResultObject;
 import com.example.userserviceproject.entity.Status;
 import com.example.userserviceproject.model.UserDtoGet;
-import com.example.userserviceproject.model.UserDtoPost;
+import com.example.userserviceproject.model.UserDtoUpdate;
 import com.example.userserviceproject.repository.ResultObjectRepository;
 import com.example.userserviceproject.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,22 +30,141 @@ public class UserController {
     private final ResultObjectRepository resultObjectRepository;
 
 
+    ResultObject result;
+    Client client;
+    Status status;
+    MetaData metaData;
+    ResponseEntity<ResultObject> responseEntity;
+
     @GetMapping
     public PagedModel<EntityModel<UserDtoGet>> getUsers(Pageable pageable,
-                                                        PagedResourcesAssembler<UserDtoGet> assembler) {
+                                                        PagedResourcesAssembler<UserDtoGet> assembler,
+                                                        HttpServletRequest request) {
+        result = new ResultObject();
+        client = setClientAttribute(request);
+        status = new Status();
+        metaData = new MetaData();
+        status.setStatusCode(200);
+        status.setMessage("Users found!");
+        metaData.setClient(client);
+        metaData.setStatus(status);
+        result.setUser(null);
+        result.setMetaData(metaData);
+        ResultObject savedResult = resultObjectRepository.save(result);
+        result.getMetaData().setRequestId(savedResult.getTransactionId());
         Page<UserDtoGet> page = userService.findAll(pageable);
         return assembler.toModel(page);
     }
 
     @GetMapping("/{nationalId}")
     public ResponseEntity<ResultObject> getUser(@PathVariable long nationalId, HttpServletRequest request) {
-        ResultObject result = new ResultObject();
-        Client client = new Client();
-        MetaData metaData = new MetaData();
-        Status status = new Status();
-        ResponseEntity<ResultObject> responseEntity;
+        result = new ResultObject();
+        client = new Client();
+        status = new Status();
+        metaData = new MetaData();
+        HttpStatus httpStatus;
         UUID userId = userService.getUserId(nationalId);
         UserDtoGet fetchedUser;
+        metaData.setClient(client);
+        if (userId == null) {
+            status.setStatusCode(404);
+            status.setMessage("User not found");
+            result.setUser(null);
+            httpStatus = HttpStatus.NOT_FOUND;
+        } else {
+            fetchedUser = userService.findById(userId);
+            status.setStatusCode(200);
+            status.setMessage("User found");
+            result.setUser(fetchedUser);
+            httpStatus = HttpStatus.OK;
+        }
+        return getResultObjectResponseEntity(httpStatus, request);
+    }
+
+    @PostMapping
+    public ResponseEntity<ResultObject> postUser(@RequestBody UserDtoGet userDTOGet,
+                                               HttpServletRequest request) {
+        result = new ResultObject();
+        client = new Client();
+        status = new Status();
+        metaData = new MetaData();
+        HttpStatus httpStatus = HttpStatus.CREATED;
+        status.setStatusCode(201);
+        status.setMessage("User created!");
+        result.setUser(userService.save(userDTOGet));
+        return getResultObjectResponseEntity(httpStatus, request);
+    }
+
+    @PutMapping("{nationalId}")
+    public ResponseEntity<ResultObject> putUser(@PathVariable long nationalId, @RequestBody UserDtoUpdate userDtoUpdate,
+                                                 HttpServletRequest request) {
+        result = new ResultObject();
+        client = new Client();
+        status = new Status();
+        metaData = new MetaData();
+        HttpStatus httpStatus;
+        UUID userId = userService.getUserId(nationalId);
+        if (userId == null) {
+            result.setUser(null);
+            status.setStatusCode(404);
+            status.setMessage("User not found!");
+            httpStatus = HttpStatus.NOT_FOUND;
+        } else {
+            result.setUser(userService.put(userId, userDtoUpdate));
+            status.setStatusCode(202);
+            status.setMessage("Accepted!");
+            httpStatus = HttpStatus.ACCEPTED;
+        }
+        return getResultObjectResponseEntity(httpStatus, request);
+    }
+
+    @PatchMapping("{nationalId}")
+    public ResponseEntity<ResultObject> patchUser(@PathVariable long nationalId, @RequestBody UserDtoUpdate userDtoUpdate,
+                                                   HttpServletRequest request) {
+        result = new ResultObject();
+        client = new Client();
+        status = new Status();
+        metaData = new MetaData();
+        HttpStatus httpStatus;
+        UUID userId = userService.getUserId(nationalId);
+        if (userId == null) {
+            result.setUser(null);
+            status.setStatusCode(404);
+            status.setMessage("User not found!");
+            httpStatus = HttpStatus.NOT_FOUND;
+        } else {
+            result.setUser(userService.patch(userId, userDtoUpdate));
+            status.setStatusCode(202);
+            status.setMessage("Accepted!");
+            httpStatus = HttpStatus.ACCEPTED;
+        }
+        return getResultObjectResponseEntity(httpStatus, request);
+    }
+
+    @DeleteMapping("{nationalId}")
+    public ResponseEntity<ResultObject> deleteUser(@PathVariable long nationalId,
+                                                 HttpServletRequest request) {
+        result = new ResultObject();
+        client = new Client();
+        status = new Status();
+        metaData = new MetaData();
+        HttpStatus httpStatus;
+        UUID userId = userService.getUserId(nationalId);
+        if (userId == null) {
+            status.setStatusCode(404);
+            status.setMessage("User not found!");
+            httpStatus = HttpStatus.NOT_FOUND;
+        } else {
+            userService.delete(userId);
+            status.setStatusCode(200);
+            status.setMessage("Ok!");
+            httpStatus = HttpStatus.OK;
+        }
+        return getResultObjectResponseEntity(httpStatus, request);
+    }
+
+    private ResponseEntity<ResultObject> getResultObjectResponseEntity(HttpStatus httpStatus,
+                                                                       HttpServletRequest request) {
         if (request.getRemoteAddr().equals("0:0:0:0:0:0:0:1")) {
             client.setClientIp("localhost");
         } else {
@@ -53,64 +172,22 @@ public class UserController {
         }
         client.setHttpMethod(request.getMethod());
         metaData.setClient(client);
-        if (userId == null) {
-            status.setStatusCode(404);
-            status.setMessage("User not found");
-            metaData.setStatus(status);
-            result.setUser(null);
-            result.setMetaData(metaData);
-            ResultObject savedObject = resultObjectRepository.save(result);
-            savedObject.getMetaData().setRequestId(savedObject.getTransactionId());
-            responseEntity = new ResponseEntity<>(savedObject, HttpStatus.NOT_FOUND);
-        } else {
-            fetchedUser = userService.findById(userId);
-            status.setStatusCode(200);
-            status.setMessage("User found");
-            metaData.setStatus(status);
-            result.setUser(fetchedUser);
-            result.setMetaData(metaData);
-            ResultObject savedObject = resultObjectRepository.save(result);
-            savedObject.getMetaData().setRequestId(savedObject.getTransactionId());
-            responseEntity = ResponseEntity.ok(savedObject);
-        }
+        metaData.setStatus(status);
+        result.setMetaData(metaData);
+        ResultObject savedResult = resultObjectRepository.save(result);
+        result.getMetaData().setRequestId(savedResult.getTransactionId());
+        responseEntity = new ResponseEntity<>(result, httpStatus);
         return responseEntity;
     }
 
-    @PostMapping
-    public ResponseEntity<UserDtoGet> postUser(@RequestBody UserDtoGet userDTOGet) {
-        UserDtoGet saved = userService.save(userDTOGet);
-        return new ResponseEntity<>(saved, HttpStatus.CREATED);
-    }
-
-    @PutMapping("{nationalId}")
-    public ResponseEntity<UserDtoPost> putUser(@PathVariable long nationalId, @RequestBody UserDtoPost userDtoPost) {
-        UUID userId = userService.getUserId(nationalId);
-        if (userId == null) {
-            return ResponseEntity.notFound().build();
+    private Client setClientAttribute(HttpServletRequest request) {
+        Client client = new Client();
+        if (request.getRemoteAddr().equals("0:0:0:0:0:0:0:1")) {
+            client.setClientIp("localhost");
         } else {
-            UserDtoPost updatedByPut = userService.put(userId, userDtoPost);
-            return ResponseEntity.ok(updatedByPut);
+            client.setClientIp(request.getRemoteAddr());
         }
-    }
-
-    @PatchMapping("{nationalId}")
-    public ResponseEntity<UserDtoPost> patchUser(@PathVariable long nationalId, @RequestBody UserDtoPost userDtoPost) {
-        UUID userId = userService.getUserId(nationalId);
-        if (userId == null) {
-            return ResponseEntity.notFound().build();
-        }
-        UserDtoPost updatedByPut = userService.patch(userId, userDtoPost);
-        return ResponseEntity.ok(updatedByPut);
-    }
-
-    @DeleteMapping("{nationalId}")
-    public ResponseEntity<UserDtoGet> deleteUser(@PathVariable long nationalId) {
-        UUID userId = userService.getUserId(nationalId);
-        if (userId == null) {
-            return ResponseEntity.notFound().build();
-        } else {
-            userService.delete(userId);
-            return ResponseEntity.ok().build();
-        }
+        client.setHttpMethod(request.getMethod());
+        return client;
     }
 }

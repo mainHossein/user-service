@@ -2,7 +2,7 @@ package com.example.userserviceproject.service;
 
 import com.example.userserviceproject.entity.User;
 import com.example.userserviceproject.model.UserDtoGet;
-import com.example.userserviceproject.model.UserDtoPost;
+import com.example.userserviceproject.model.UserDtoUpdate;
 import com.example.userserviceproject.model.mapper.Mapper;
 import com.example.userserviceproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,20 +41,20 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserDtoPost put(UUID id, UserDtoPost updated) {
-        User updatedUser = mapper.dtoPostToUser(updated);
+    public UserDtoGet put(UUID id, UserDtoUpdate updated) {
+        User updatedUser = mapper.dtoUpdateToUser(updated);
         User fetched = userRepository.getReferenceById(id);
         fetched.setFirstName(updatedUser.getFirstName());
         fetched.setLastName(updatedUser.getLastName());
         fetched.setEmail(updatedUser.getEmail());
         fetched.setPhoneNumber(updatedUser.getPhoneNumber());
         fetched.setBirthDate(updatedUser.getBirthDate());
-        return mapper.userToDtoPost(userRepository.save(fetched));
+        return mapper.userToDtoGet(userRepository.save(fetched));
     }
 
     @Transactional
     @Override
-    public UserDtoPost patch(UUID id, UserDtoPost updatedUser) {
+    public UserDtoGet patch(UUID id, UserDtoUpdate updatedUser) {
         User fetcheduser = userRepository.getReferenceById(id);
         if (updatedUser.getFirstName() != null) {
             fetcheduser.setFirstName(updatedUser.getFirstName());
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
         if (updatedUser.getBirthDate() != null) {
             fetcheduser.setBirthDate(updatedUser.getBirthDate());
         }
-        return mapper.userToDtoPost(userRepository.save(fetcheduser));
+        return mapper.userToDtoGet(userRepository.save(fetcheduser));
     }
 
     @Override

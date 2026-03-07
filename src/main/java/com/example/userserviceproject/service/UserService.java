@@ -1,7 +1,7 @@
 package com.example.userserviceproject.service;
 
 import com.example.userserviceproject.model.UserDtoGet;
-import com.example.userserviceproject.model.UserDtoPost;
+import com.example.userserviceproject.model.UserDtoUpdate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,8 +13,8 @@ public interface UserService {
     Page<UserDtoGet> findAll(Pageable pageable);
     UserDtoGet findById(UUID id);
     UserDtoGet save(UserDtoGet userDTOGet);
-    UserDtoPost put(UUID id, UserDtoPost updated);
-    UserDtoPost patch(UUID id, UserDtoPost updatedUser);
+    UserDtoGet put(UUID id, UserDtoUpdate updated);
+    UserDtoGet patch(UUID id, UserDtoUpdate updatedUser);
     void delete(UUID id);
     UUID getUserId(Long nationalId);
 }

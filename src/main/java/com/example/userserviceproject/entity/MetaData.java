@@ -10,10 +10,10 @@ import lombok.ToString;
 
 import java.util.UUID;
 
-@Embeddable
 @Getter
 @Setter
 @ToString
+@Embeddable
 public class MetaData {
     @Transient
     private UUID requestId;
@@ -23,3 +23,4 @@ public class MetaData {
     @JsonIgnore
     private Client client;
 }
+

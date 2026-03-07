@@ -2,7 +2,7 @@ package com.example.userserviceproject.model.mapper;
 
 import com.example.userserviceproject.entity.User;
 import com.example.userserviceproject.model.UserDtoGet;
-import com.example.userserviceproject.model.UserDtoPost;
+import com.example.userserviceproject.model.UserDtoUpdate;
 
 public class Mapper {
     public User dtoGetToUser(UserDtoGet userDTOGet){
@@ -26,22 +26,22 @@ public class Mapper {
         return userDTOGet;
     }
 
-    public User dtoPostToUser(UserDtoPost userDtoPost){
+    public User dtoUpdateToUser(UserDtoUpdate userDtoUpdate){
         User user = new User();
-        user.setFirstName(userDtoPost.getFirstName());
-        user.setLastName(userDtoPost.getLastName());
-        user.setEmail(userDtoPost.getEmail());
-        user.setPhoneNumber(userDtoPost.getPhoneNumber());
-        user.setBirthDate(userDtoPost.getBirthDate());
+        user.setFirstName(userDtoUpdate.getFirstName());
+        user.setLastName(userDtoUpdate.getLastName());
+        user.setEmail(userDtoUpdate.getEmail());
+        user.setPhoneNumber(userDtoUpdate.getPhoneNumber());
+        user.setBirthDate(userDtoUpdate.getBirthDate());
         return user;
     }
-    public UserDtoPost userToDtoPost(User user){
-        UserDtoPost userDtoPost = new UserDtoPost();
-        userDtoPost.setFirstName(user.getFirstName());
-        userDtoPost.setLastName(user.getLastName());
-        userDtoPost.setEmail(user.getEmail());
-        userDtoPost.setPhoneNumber(user.getPhoneNumber());
-        userDtoPost.setBirthDate(user.getBirthDate());
-        return userDtoPost;
+    public UserDtoUpdate userToDtoUpdate(User user){
+        UserDtoUpdate userDtoUpdate = new UserDtoUpdate();
+        userDtoUpdate.setFirstName(user.getFirstName());
+        userDtoUpdate.setLastName(user.getLastName());
+        userDtoUpdate.setEmail(user.getEmail());
+        userDtoUpdate.setPhoneNumber(user.getPhoneNumber());
+        userDtoUpdate.setBirthDate(user.getBirthDate());
+        return userDtoUpdate;
     }
 }
