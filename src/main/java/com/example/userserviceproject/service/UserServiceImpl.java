@@ -6,11 +6,10 @@ import com.example.userserviceproject.model.UserDtoUpdate;
 import com.example.userserviceproject.model.mapper.Mapper;
 import com.example.userserviceproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -20,18 +19,8 @@ public class UserServiceImpl implements UserService {
     private final Mapper mapper = new Mapper();
 
     @Override
-    public Page<UserDtoGet> findAll(Pageable pageable) {
-        Page<User> users = userRepository.findAll(pageable);
-        return users.map(mapper::userToDtoGet);
-    }
-
-    @Override
     public UserDtoGet findById(UUID id) {
-        if (userRepository.existsById(id)) {
-            return mapper.userToDtoGet(userRepository.findById(id).get());
-        } else {
-            return null;
-        }
+            return mapper.userToDtoGet(Objects.requireNonNull(userRepository.findById(id).orElse(null)));
     }
 
     @Override

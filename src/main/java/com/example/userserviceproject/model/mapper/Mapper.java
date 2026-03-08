@@ -35,13 +35,4 @@ public class Mapper {
         user.setBirthDate(userDtoUpdate.getBirthDate());
         return user;
     }
-    public UserDtoUpdate userToDtoUpdate(User user){
-        UserDtoUpdate userDtoUpdate = new UserDtoUpdate();
-        userDtoUpdate.setFirstName(user.getFirstName());
-        userDtoUpdate.setLastName(user.getLastName());
-        userDtoUpdate.setEmail(user.getEmail());
-        userDtoUpdate.setPhoneNumber(user.getPhoneNumber());
-        userDtoUpdate.setBirthDate(user.getBirthDate());
-        return userDtoUpdate;
-    }
 }

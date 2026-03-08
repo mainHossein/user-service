@@ -10,11 +10,6 @@ import com.example.userserviceproject.repository.ResultObjectRepository;
 import com.example.userserviceproject.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,26 +30,6 @@ public class UserController {
     Status status;
     MetaData metaData;
     ResponseEntity<ResultObject> responseEntity;
-
-    @GetMapping
-    public PagedModel<EntityModel<UserDtoGet>> getUsers(Pageable pageable,
-                                                        PagedResourcesAssembler<UserDtoGet> assembler,
-                                                        HttpServletRequest request) {
-        result = new ResultObject();
-        client = setClientAttribute(request);
-        status = new Status();
-        metaData = new MetaData();
-        status.setStatusCode(200);
-        status.setMessage("Users found!");
-        metaData.setClient(client);
-        metaData.setStatus(status);
-        result.setUser(null);
-        result.setMetaData(metaData);
-        ResultObject savedResult = resultObjectRepository.save(result);
-        result.getMetaData().setRequestId(savedResult.getTransactionId());
-        Page<UserDtoGet> page = userService.findAll(pageable);
-        return assembler.toModel(page);
-    }
 
     @GetMapping("/{nationalId}")
     public ResponseEntity<ResultObject> getUser(@PathVariable long nationalId, HttpServletRequest request) {
@@ -180,14 +155,4 @@ public class UserController {
         return responseEntity;
     }
 
-    private Client setClientAttribute(HttpServletRequest request) {
-        Client client = new Client();
-        if (request.getRemoteAddr().equals("0:0:0:0:0:0:0:1")) {
-            client.setClientIp("localhost");
-        } else {
-            client.setClientIp(request.getRemoteAddr());
-        }
-        client.setHttpMethod(request.getMethod());
-        return client;
-    }
 }
