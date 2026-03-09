@@ -1,11 +1,10 @@
-package com.example.liquibasetestproject;
+package com.example.userserviceproject;
 
-import com.example.userserviceproject.UserServiceProjectApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest(classes = UserServiceProjectApplication.class)
-class LiquibasetestprojectApplicationTests {
+class UserServiceProjectApplicationTests {
 
     @Test
     void contextLoads() {

@@ -11,8 +11,8 @@
     <groupId>com.example</groupId>
     <artifactId>userServiceProject</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>liquibasetestproject</name>
-    <description>liquibasetestproject</description>
+    <name>userServiceProject</name>
+    <description>userServiceProject</description>
     <url/>
     <licenses>
         <license/>
