@@ -29,6 +29,8 @@ public class ResultObject {
     private UserDtoGet user;
     @Embedded
     private MetaData metaData;
+    @JsonIgnore
+    private final String service = "user";
     @CreationTimestamp
     @JsonIgnore
     private Timestamp requestedAt;

@@ -9,4 +9,6 @@
     <include file="db/changelog/init-result-table.xml"/>
     <include file="db/changelog/rename-column-in-result-table.xml"/>
     <include file="db/changelog/add-column-table-result.xml"/>
+    <include file="db/changelog/alter-result-table.xml"/>
+    <include file="db/changelog/insert-into-result.xml"/>
 </databaseChangeLog>
