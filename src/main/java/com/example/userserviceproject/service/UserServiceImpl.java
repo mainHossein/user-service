@@ -1,7 +1,7 @@
 package com.example.userserviceproject.service;
 
 import com.example.userserviceproject.entity.User;
-import com.example.userserviceproject.model.UserDtoGet;
+import com.example.userserviceproject.model.UserDtoGetAndPost;
 import com.example.userserviceproject.model.UserDtoUpdate;
 import com.example.userserviceproject.model.mapper.Mapper;
 import com.example.userserviceproject.repository.UserRepository;
@@ -19,18 +19,18 @@ public class UserServiceImpl implements UserService {
     private final Mapper mapper = new Mapper();
 
     @Override
-    public UserDtoGet findById(UUID id) {
+    public UserDtoGetAndPost findById(UUID id) {
             return mapper.userToDtoGet(Objects.requireNonNull(userRepository.findById(id).orElse(null)));
     }
 
     @Override
-    public UserDtoGet save(UserDtoGet userDTOGet) {
-        return mapper.userToDtoGet(userRepository.save(mapper.dtoGetToUser(userDTOGet)));
+    public UserDtoGetAndPost save(UserDtoGetAndPost userDTOGetAndPost) {
+        return mapper.userToDtoGet(userRepository.save(mapper.dtoGetToUser(userDTOGetAndPost)));
     }
 
     @Transactional
     @Override
-    public UserDtoGet put(UUID id, UserDtoUpdate updated) {
+    public UserDtoGetAndPost put(UUID id, UserDtoUpdate updated) {
         User updatedUser = mapper.dtoUpdateToUser(updated);
         User fetched = userRepository.getReferenceById(id);
         fetched.setFirstName(updatedUser.getFirstName());
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserDtoGet patch(UUID id, UserDtoUpdate updatedUser) {
+    public UserDtoGetAndPost patch(UUID id, UserDtoUpdate updatedUser) {
         User fetcheduser = userRepository.getReferenceById(id);
         if (updatedUser.getFirstName() != null) {
             fetcheduser.setFirstName(updatedUser.getFirstName());

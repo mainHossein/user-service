@@ -1,6 +1,6 @@
 package com.example.userserviceproject.entity;
 
-import com.example.userserviceproject.model.UserDtoGet;
+import com.example.userserviceproject.model.UserDtoGetAndPost;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -26,7 +26,7 @@ public class ResultObject {
     private UUID transactionId;
     @Embedded
     @Transient
-    private UserDtoGet user;
+    private UserDtoGetAndPost user;
     @Embedded
     private MetaData metaData;
     @JsonIgnore

@@ -12,8 +12,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -127,9 +129,28 @@ public class GlobalExceptionHandler {
         return responseEntity;
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ResultObject> wrongHeaders(HttpServletRequest request,
+                                                     MethodArgumentNotValidException ex) {
+        result = new ResultObject();
+        client = new Client();
+        metaData = new MetaData();
+        status = new Status();
+        status.setStatusCode(400);
+        ex.getBindingResult().getAllErrors().forEach(error -> {
+            String fieldName = ((FieldError) error).getField();
+            String message = error.getDefaultMessage();
+            status.setMessage(fieldName + " " + message);
+        });
+        ResultObject savedObject = response(request);
+        responseEntity = new ResponseEntity<>(savedObject, HttpStatus.BAD_REQUEST);
+        return responseEntity;
+    }
+
     private ResultObject response(HttpServletRequest request) {
         if (request.getRemoteAddr().equals("0:0:0:0:0:0:0:1")) {
-            client.setClientIp("localhost");
+            client.setClientIp("127.0.0.1");
         } else {
             client.setClientIp(request.getRemoteAddr());
         }

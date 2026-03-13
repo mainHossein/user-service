@@ -1,29 +1,29 @@
 package com.example.userserviceproject.model.mapper;
 
 import com.example.userserviceproject.entity.User;
-import com.example.userserviceproject.model.UserDtoGet;
+import com.example.userserviceproject.model.UserDtoGetAndPost;
 import com.example.userserviceproject.model.UserDtoUpdate;
 
 public class Mapper {
-    public User dtoGetToUser(UserDtoGet userDTOGet){
+    public User dtoGetToUser(UserDtoGetAndPost userDTOGetAndPost){
         User user = new User();
-        user.setNationalId(userDTOGet.getNationalId());
-        user.setFirstName(userDTOGet.getFirstName());
-        user.setLastName(userDTOGet.getLastName());
-        user.setEmail(userDTOGet.getEmail());
-        user.setPhoneNumber(userDTOGet.getPhoneNumber());
-        user.setBirthDate(userDTOGet.getBirthDate());
+        user.setNationalId(userDTOGetAndPost.getNationalId());
+        user.setFirstName(userDTOGetAndPost.getFirstName());
+        user.setLastName(userDTOGetAndPost.getLastName());
+        user.setEmail(userDTOGetAndPost.getEmail());
+        user.setPhoneNumber(userDTOGetAndPost.getPhoneNumber());
+        user.setBirthDate(userDTOGetAndPost.getBirthDate());
         return user;
     }
-    public UserDtoGet userToDtoGet(User user){
-        UserDtoGet userDTOGet = new UserDtoGet();
-        userDTOGet.setNationalId(user.getNationalId());
-        userDTOGet.setFirstName(user.getFirstName());
-        userDTOGet.setLastName(user.getLastName());
-        userDTOGet.setEmail(user.getEmail());
-        userDTOGet.setPhoneNumber(user.getPhoneNumber());
-        userDTOGet.setBirthDate(user.getBirthDate());
-        return userDTOGet;
+    public UserDtoGetAndPost userToDtoGet(User user){
+        UserDtoGetAndPost userDTOGetAndPost = new UserDtoGetAndPost();
+        userDTOGetAndPost.setNationalId(user.getNationalId());
+        userDTOGetAndPost.setFirstName(user.getFirstName());
+        userDTOGetAndPost.setLastName(user.getLastName());
+        userDTOGetAndPost.setEmail(user.getEmail());
+        userDTOGetAndPost.setPhoneNumber(user.getPhoneNumber());
+        userDTOGetAndPost.setBirthDate(user.getBirthDate());
+        return userDTOGetAndPost;
     }
 
     public User dtoUpdateToUser(UserDtoUpdate userDtoUpdate){

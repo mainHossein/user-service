@@ -32,7 +32,7 @@ public class BootstrapData implements CommandLineRunner {
 
     public void loadData() throws FileNotFoundException {
         AtomicInteger count = new AtomicInteger();
-        File file = ResourceUtils.getFile("/media/hossein/New Volume/AI/Documents/test-data-unique.csv");
+        File file = ResourceUtils.getFile("src/main/resources/test-data-unique.csv");
         List<UserCSVRecord> records = userCSVService.convertToCsv(file);
         records.forEach(userCSVRecord -> {
             userRepository.save(User.builder()

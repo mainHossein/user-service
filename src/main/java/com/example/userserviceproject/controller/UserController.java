@@ -4,7 +4,7 @@ import com.example.userserviceproject.entity.Client;
 import com.example.userserviceproject.entity.MetaData;
 import com.example.userserviceproject.entity.ResultObject;
 import com.example.userserviceproject.entity.Status;
-import com.example.userserviceproject.model.UserDtoGet;
+import com.example.userserviceproject.model.UserDtoGetAndPost;
 import com.example.userserviceproject.model.UserDtoUpdate;
 import com.example.userserviceproject.repository.ResultObjectRepository;
 import com.example.userserviceproject.service.UserService;
@@ -25,11 +25,10 @@ public class UserController {
     private final ResultObjectRepository resultObjectRepository;
 
 
-    ResultObject result;
-    Client client;
-    Status status;
-    MetaData metaData;
-    ResponseEntity<ResultObject> responseEntity;
+    private ResultObject result;
+    private Client client;
+    private Status status;
+    private MetaData metaData;
 
     @GetMapping("/{nationalId}")
     public ResponseEntity<ResultObject> getUser(@PathVariable long nationalId, HttpServletRequest request) {
@@ -39,15 +38,13 @@ public class UserController {
         metaData = new MetaData();
         HttpStatus httpStatus;
         UUID userId = userService.getUserId(nationalId);
-        UserDtoGet fetchedUser;
-        metaData.setClient(client);
         if (userId == null) {
             status.setStatusCode(404);
             status.setMessage("User not found");
             result.setUser(null);
             httpStatus = HttpStatus.NOT_FOUND;
         } else {
-            fetchedUser = userService.findById(userId);
+            UserDtoGetAndPost fetchedUser = userService.findById(userId);
             status.setStatusCode(200);
             status.setMessage("User found");
             result.setUser(fetchedUser);
@@ -57,7 +54,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<ResultObject> postUser(@RequestBody UserDtoGet userDTOGet,
+    public ResponseEntity<ResultObject> postUser(@RequestBody UserDtoGetAndPost userDTOGetAndPost,
                                                HttpServletRequest request) {
         result = new ResultObject();
         client = new Client();
@@ -66,7 +63,7 @@ public class UserController {
         HttpStatus httpStatus = HttpStatus.CREATED;
         status.setStatusCode(201);
         status.setMessage("User created!");
-        result.setUser(userService.save(userDTOGet));
+        result.setUser(userService.save(userDTOGetAndPost));
         return getResultObjectResponseEntity(httpStatus, request);
     }
 
@@ -141,7 +138,7 @@ public class UserController {
     private ResponseEntity<ResultObject> getResultObjectResponseEntity(HttpStatus httpStatus,
                                                                        HttpServletRequest request) {
         if (request.getRemoteAddr().equals("0:0:0:0:0:0:0:1")) {
-            client.setClientIp("localhost");
+            client.setClientIp("127.0.0.1");
         } else {
             client.setClientIp(request.getRemoteAddr());
         }
@@ -151,8 +148,7 @@ public class UserController {
         result.setMetaData(metaData);
         ResultObject savedResult = resultObjectRepository.save(result);
         result.getMetaData().setRequestId(savedResult.getTransactionId());
-        responseEntity = new ResponseEntity<>(result, httpStatus);
-        return responseEntity;
+        return new ResponseEntity<>(result, httpStatus);
     }
 
 }
