@@ -1,7 +1,7 @@
 # user service
 Service related to product management
 
-base url: http://localhost:8080
+base url: http://localhost:8080/api/v1/user
 
 1-get user :
 
@@ -19,7 +19,7 @@ base url: http://localhost:8080
 
     example:
         request :
-            curl -X GET http://localhost:8080/users/1000000000
+            curl -X GET http://localhost:8080/api/v1/user/users/1000000000
         response : 
             {
                 "user":{
@@ -69,7 +69,7 @@ base url: http://localhost:8080
 
     example:
         request :
-            curl -X POST http://localhost:8080/users
+            curl -X POST http://localhost:8080/api/v1/user/users
             -d 
                 '{
                     "nationalId" : 1,
@@ -129,7 +129,7 @@ base url: http://localhost:8080
 
     example:
         request :
-            curl -X PUT http://localhost:8080/users/1
+            curl -X PUT http://localhost:8080/api/v1/user/users/1
             -d 
                 '{
                     "firstName" : "Sohrab",
@@ -189,7 +189,7 @@ base url: http://localhost:8080
 
     example:
         request :
-            curl -X PATCH http://localhost:8080/users/1
+            curl -X PATCH http://localhost:8080/api/v1/user/users/1
             -d 
                 '{
                     "phoneNumber" : "+989396665842",
@@ -232,7 +232,7 @@ base url: http://localhost:8080
 
     example:
         request :
-            curl -X DELETE http://localhost:8080/users/1
+            curl -X DELETE http://localhost:8080/api/v1/user/users/1
 
         response : 
             {
