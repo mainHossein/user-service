@@ -3,7 +3,37 @@ Service related to product management
 
 base url: http://localhost:8080/api/v1/user
 
-1-get user :
+
+1-check user exists :
+    
+    end point : /users/check-national-id/{nationalId}
+
+    path variables :
+        national_id ->
+            type : Long
+
+    query params : null
+
+    data : null
+    
+    headers : null
+
+    example:
+        request :
+            curl -X GET http://localhost:8080/api/v1/user/users/check-national-id/1000000000
+        response : 
+            {
+                "user":null,
+                "metaData":{
+                    "requestId":"f86ec573-1d1b-4f4f-8fb2-2afa3826d1b1",
+                    "status":{
+                        "statusCode":200,
+                        "message":"User exists"
+                    }
+                }
+            }
+
+2-get user :
 
     end point : /users/{national_id}
 
@@ -39,7 +69,7 @@ base url: http://localhost:8080/api/v1/user
                 }
             }
 
-2-post user :
+3-post user :
 
     end point : /users
 
@@ -100,7 +130,7 @@ base url: http://localhost:8080/api/v1/user
                 }
             }
 
-3-put user :
+4-put user :
 
     end point : /users/{national_id}
 
@@ -160,7 +190,7 @@ base url: http://localhost:8080/api/v1/user
             }
 
 
-4-patch user :
+5-patch user :
 
     end point : /users/{national_id}
 
@@ -216,7 +246,7 @@ base url: http://localhost:8080/api/v1/user
                 }
             }
 
-5-delete user :
+6-delete user :
 
     end point : /users/{national_id}
 

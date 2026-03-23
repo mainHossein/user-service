@@ -77,4 +77,9 @@ public class UserServiceImpl implements UserService {
             return null;
         }
     }
+
+    @Override
+    public Boolean checkUserExists(long nationalId) {
+        return userRepository.existsByNationalId(nationalId);
+    }
 }

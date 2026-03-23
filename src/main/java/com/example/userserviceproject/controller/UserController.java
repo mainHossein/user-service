@@ -30,6 +30,26 @@ public class UserController {
     private Status status;
     private MetaData metaData;
 
+    @GetMapping("/check-national-id/{nationalId}")
+    public ResponseEntity<ResultObject> checkNationalId(@PathVariable long nationalId, HttpServletRequest request) {
+        result = new ResultObject();
+        client = new Client();
+        status = new Status();
+        metaData = new MetaData();
+        HttpStatus httpStatus;
+        result.setUser(null);
+        if (userService.checkUserExists(nationalId)) {
+            status.setStatusCode(200);
+            status.setMessage("User exists");
+            httpStatus = HttpStatus.OK;
+        } else {
+            status.setStatusCode(404);
+            status.setMessage("User not exists");
+            httpStatus = HttpStatus.NOT_FOUND;
+        }
+        return getResultObjectResponseEntity(httpStatus, request);
+    }
+
     @GetMapping("/{nationalId}")
     public ResponseEntity<ResultObject> getUser(@PathVariable long nationalId, HttpServletRequest request) {
         result = new ResultObject();

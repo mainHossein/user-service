@@ -8,5 +8,6 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<User, UUID> {
     User findByNationalId(Long nationalId);
 
+    boolean existsByNationalId(long nationalId);
 }
 

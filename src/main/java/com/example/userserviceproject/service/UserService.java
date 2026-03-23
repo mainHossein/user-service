@@ -14,4 +14,5 @@ public interface UserService {
     UserDtoGetAndPost patch(UUID id, UserDtoUpdate updatedUser);
     void delete(UUID id);
     UUID getUserId(Long nationalId);
+    Boolean checkUserExists(long nationalId);
 }
