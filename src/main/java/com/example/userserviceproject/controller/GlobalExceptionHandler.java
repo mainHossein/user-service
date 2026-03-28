@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
     ResponseEntity<ResultObject> responseEntity;
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ResultObject> typeMisMatched(HttpServletRequest request) {
         result = new ResultObject();
         client = new Client();
@@ -42,12 +42,12 @@ public class GlobalExceptionHandler {
         status.setStatusCode(400);
         status.setMessage("National id should be only numbers");
         ResultObject savedObject = response(request);
-        responseEntity = new ResponseEntity<>(savedObject, HttpStatus.BAD_REQUEST);
+        responseEntity = new ResponseEntity<>(savedObject, HttpStatus.OK);
         return responseEntity;
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ResultObject> wrongPath(HttpServletRequest request) {
         result = new ResultObject();
         client = new Client();
@@ -56,12 +56,12 @@ public class GlobalExceptionHandler {
         status.setStatusCode(404);
         status.setMessage("Not Found!");
         ResultObject savedObject = response(request);
-        responseEntity = new ResponseEntity<>(savedObject, HttpStatus.NOT_FOUND);
+        responseEntity = new ResponseEntity<>(savedObject, HttpStatus.OK);
         return responseEntity;
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ResultObject> duplicatedPrimaryKey(HttpServletRequest request) {
         result = new ResultObject();
         client = new Client();
@@ -70,12 +70,12 @@ public class GlobalExceptionHandler {
         status.setStatusCode(400);
         status.setMessage("User with this national id already exists!");
         ResultObject savedObject = response(request);
-        responseEntity = new ResponseEntity<>(savedObject, HttpStatus.BAD_REQUEST);
+        responseEntity = new ResponseEntity<>(savedObject, HttpStatus.OK);
         return responseEntity;
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ResultObject> nullField(HttpServletRequest request) {
         result = new ResultObject();
         client = new Client();
@@ -84,12 +84,12 @@ public class GlobalExceptionHandler {
         status.setStatusCode(400);
         status.setMessage("Fields shouldn't be null!");
         ResultObject savedObject = response(request);
-        responseEntity = new ResponseEntity<>(savedObject, HttpStatus.BAD_REQUEST);
+        responseEntity = new ResponseEntity<>(savedObject, HttpStatus.OK);
         return responseEntity;
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ResultObject> wrongStructure(HttpServletRequest request) {
         result = new ResultObject();
         client = new Client();
@@ -98,12 +98,12 @@ public class GlobalExceptionHandler {
         status.setStatusCode(400);
         status.setMessage("Wrong structure in data!");
         ResultObject savedObject = response(request);
-        responseEntity = new ResponseEntity<>(savedObject, HttpStatus.BAD_REQUEST);
+        responseEntity = new ResponseEntity<>(savedObject, HttpStatus.OK);
         return responseEntity;
     }
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ResultObject> unSupportedMediaType(HttpServletRequest request) {
         result = new ResultObject();
         client = new Client();
@@ -112,11 +112,11 @@ public class GlobalExceptionHandler {
         status.setStatusCode(415);
         status.setMessage("Unsupported media type!");
         ResultObject savedObject = response(request);
-        responseEntity = new ResponseEntity<>(savedObject, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+        responseEntity = new ResponseEntity<>(savedObject, HttpStatus.OK);
         return responseEntity;
     }
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ResultObject> unSupportedMethod(HttpServletRequest request) {
         result = new ResultObject();
         client = new Client();
@@ -125,12 +125,12 @@ public class GlobalExceptionHandler {
         status.setStatusCode(405);
         status.setMessage("Method not allowed!");
         ResultObject savedObject = response(request);
-        responseEntity = new ResponseEntity<>(savedObject, HttpStatus.METHOD_NOT_ALLOWED);
+        responseEntity = new ResponseEntity<>(savedObject, HttpStatus.OK);
         return responseEntity;
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ResultObject> wrongHeaders(HttpServletRequest request,
                                                      MethodArgumentNotValidException ex) {
         result = new ResultObject();
@@ -144,7 +144,7 @@ public class GlobalExceptionHandler {
             status.setMessage(fieldName + " " + message);
         });
         ResultObject savedObject = response(request);
-        responseEntity = new ResponseEntity<>(savedObject, HttpStatus.BAD_REQUEST);
+        responseEntity = new ResponseEntity<>(savedObject, HttpStatus.OK);
         return responseEntity;
     }
 

@@ -29,6 +29,7 @@ public class UserController {
     private Client client;
     private Status status;
     private MetaData metaData;
+    private final HttpStatus httpStatus = HttpStatus.OK;
 
     @GetMapping("/check-national-id/{nationalId}")
     public ResponseEntity<ResultObject> checkNationalId(@PathVariable long nationalId, HttpServletRequest request) {
@@ -36,16 +37,13 @@ public class UserController {
         client = new Client();
         status = new Status();
         metaData = new MetaData();
-        HttpStatus httpStatus;
         result.setUser(null);
         if (userService.checkUserExists(nationalId)) {
             status.setStatusCode(200);
             status.setMessage("User exists");
-            httpStatus = HttpStatus.OK;
         } else {
             status.setStatusCode(404);
             status.setMessage("User not exists");
-            httpStatus = HttpStatus.NOT_FOUND;
         }
         return getResultObjectResponseEntity(httpStatus, request);
     }
@@ -56,19 +54,16 @@ public class UserController {
         client = new Client();
         status = new Status();
         metaData = new MetaData();
-        HttpStatus httpStatus;
         UUID userId = userService.getUserId(nationalId);
         if (userId == null) {
             status.setStatusCode(404);
             status.setMessage("User not found");
             result.setUser(null);
-            httpStatus = HttpStatus.NOT_FOUND;
         } else {
             UserDtoGetAndPost fetchedUser = userService.findById(userId);
             status.setStatusCode(200);
             status.setMessage("User found");
             result.setUser(fetchedUser);
-            httpStatus = HttpStatus.OK;
         }
         return getResultObjectResponseEntity(httpStatus, request);
     }
@@ -80,7 +75,6 @@ public class UserController {
         client = new Client();
         status = new Status();
         metaData = new MetaData();
-        HttpStatus httpStatus = HttpStatus.CREATED;
         status.setStatusCode(201);
         status.setMessage("User created!");
         result.setUser(userService.save(userDTOGetAndPost));
@@ -94,18 +88,15 @@ public class UserController {
         client = new Client();
         status = new Status();
         metaData = new MetaData();
-        HttpStatus httpStatus;
         UUID userId = userService.getUserId(nationalId);
         if (userId == null) {
             result.setUser(null);
             status.setStatusCode(404);
             status.setMessage("User not found!");
-            httpStatus = HttpStatus.NOT_FOUND;
         } else {
             result.setUser(userService.put(userId, userDtoUpdate));
             status.setStatusCode(202);
             status.setMessage("Accepted!");
-            httpStatus = HttpStatus.ACCEPTED;
         }
         return getResultObjectResponseEntity(httpStatus, request);
     }
@@ -117,18 +108,15 @@ public class UserController {
         client = new Client();
         status = new Status();
         metaData = new MetaData();
-        HttpStatus httpStatus;
         UUID userId = userService.getUserId(nationalId);
         if (userId == null) {
             result.setUser(null);
             status.setStatusCode(404);
             status.setMessage("User not found!");
-            httpStatus = HttpStatus.NOT_FOUND;
         } else {
             result.setUser(userService.patch(userId, userDtoUpdate));
             status.setStatusCode(202);
             status.setMessage("Accepted!");
-            httpStatus = HttpStatus.ACCEPTED;
         }
         return getResultObjectResponseEntity(httpStatus, request);
     }
@@ -140,17 +128,14 @@ public class UserController {
         client = new Client();
         status = new Status();
         metaData = new MetaData();
-        HttpStatus httpStatus;
         UUID userId = userService.getUserId(nationalId);
         if (userId == null) {
             status.setStatusCode(404);
             status.setMessage("User not found!");
-            httpStatus = HttpStatus.NOT_FOUND;
         } else {
             userService.delete(userId);
             status.setStatusCode(200);
             status.setMessage("Ok!");
-            httpStatus = HttpStatus.OK;
         }
         return getResultObjectResponseEntity(httpStatus, request);
     }
