@@ -6,6 +6,7 @@ import com.example.userserviceproject.model.UserDtoUpdate;
 import com.example.userserviceproject.model.mapper.Mapper;
 import com.example.userserviceproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final Mapper mapper = new Mapper();
 
+    @Cacheable(cacheNames = "userCache", key = "#id")
     @Override
     public UserDtoGetAndPost findById(UUID id) {
             return mapper.userToDtoGet(Objects.requireNonNull(userRepository.findById(id).orElse(null)));
