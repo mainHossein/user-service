@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+       https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.31.xsd">
+    <include file="db/changelog/init-user-table.xml"/>
+    <include file="db/changelog/truncate-table-users.xml"/>
+    <include file="db/changelog/init-result-table.xml"/>
+    <include file="db/changelog/rename-column-in-result-table.xml"/>
+    <include file="db/changelog/add-column-table-result.xml"/>
+    <include file="db/changelog/alter-result-table.xml"/>
+    <include file="db/changelog/insert-into-result.xml"/>
+</databaseChangeLog>

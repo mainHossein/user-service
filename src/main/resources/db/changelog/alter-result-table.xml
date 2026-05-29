@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+       https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.31.xsd">
+    <changeSet id="1773068070287-1" author="mainHossein">
+        <addColumn tableName="result">
+            <column name="service" type="varchar"/>
+        </addColumn>
+        <sql>
+            UPDATE result SET service=user WHERE transaction_id IS NOT NULL;
+        </sql>
+    </changeSet>
+</databaseChangeLog>
