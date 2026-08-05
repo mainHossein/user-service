@@ -1,5 +1,5 @@
 # user service
-Service related to product management
+Service related to user management
 
 base url: http://localhost:8080/api/v1/user
 
