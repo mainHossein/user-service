@@ -34,17 +34,19 @@ public class BootstrapData implements CommandLineRunner {
         AtomicInteger count = new AtomicInteger();
         File file = ResourceUtils.getFile("src/main/resources/test-data-unique.csv");
         List<UserCSVRecord> records = userCSVService.convertToCsv(file);
-        records.forEach(userCSVRecord -> {
-            userRepository.save(User.builder()
-                    .nationalId(userCSVRecord.getNationalId())
-                    .firstName(userCSVRecord.getFirstName())
-                    .lastName(userCSVRecord.getLastName())
-                    .phoneNumber(userCSVRecord.getPhoneNumber())
-                    .birthDate(userCSVRecord.getBirthDate())
-                    .email(userCSVRecord.getEmail())
-                    .build());
-            System.out.println(count.incrementAndGet() + " user added...");
-        });
+        for (UserCSVRecord record : records) {
+            if (count.get() < 1000) {
+                userRepository.save(User.builder()
+                        .nationalId(record.getNationalId())
+                        .firstName(record.getFirstName())
+                        .lastName(record.getLastName())
+                        .phoneNumber(record.getPhoneNumber())
+                        .birthDate(record.getBirthDate())
+                        .email(record.getEmail())
+                        .build());
+                System.out.println(count.incrementAndGet() + " user added...");
+            }
+        }
 
     }
 }
