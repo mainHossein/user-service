@@ -4,11 +4,10 @@ import com.example.userserviceproject.entity.User;
 import com.example.userserviceproject.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -30,21 +29,23 @@ public class BootstrapData implements CommandLineRunner {
         }
     }
 
-    public void loadData() throws FileNotFoundException {
+    public void loadData() throws IOException {
         AtomicInteger count = new AtomicInteger();
-        File file = ResourceUtils.getFile("src/main/resources/test-data-unique.csv");
-        List<UserCSVRecord> records = userCSVService.convertToCsv(file);
-        records.forEach(userCSVRecord -> {
-            userRepository.save(User.builder()
-                    .nationalId(userCSVRecord.getNationalId())
-                    .firstName(userCSVRecord.getFirstName())
-                    .lastName(userCSVRecord.getLastName())
-                    .phoneNumber(userCSVRecord.getPhoneNumber())
-                    .birthDate(userCSVRecord.getBirthDate())
-                    .email(userCSVRecord.getEmail())
-                    .build());
-            System.out.println(count.incrementAndGet() + " user added...");
-        });
+        ClassPathResource resource = new ClassPathResource("test-data-unique.csv");
+        List<UserCSVRecord> records = userCSVService.convertToCsv(resource.getInputStream());
+        for (UserCSVRecord record : records) {
+            if (count.get() < 1000) {
+                userRepository.save(User.builder()
+                        .nationalId(record.getNationalId())
+                        .firstName(record.getFirstName())
+                        .lastName(record.getLastName())
+                        .phoneNumber(record.getPhoneNumber())
+                        .birthDate(record.getBirthDate())
+                        .email(record.getEmail())
+                        .build());
+                System.out.println(count.incrementAndGet() + " user added...");
+            }
+        }
 
     }
 }
