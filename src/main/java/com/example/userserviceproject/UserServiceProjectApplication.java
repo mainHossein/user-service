@@ -11,20 +11,6 @@ import org.springframework.core.env.ConfigurableEnvironment;
 public class UserServiceProjectApplication {
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext run = SpringApplication.run(UserServiceProjectApplication.class, args);
-        ConfigurableEnvironment environment = run.getEnvironment();
-        Integer port = environment.getProperty("server.port", Integer.class);
-        String path = environment.getProperty("server.servlet.context-path");
-        printServerInfo(port, path);
+        SpringApplication.run(UserServiceProjectApplication.class, args);
     }
-
-    private static void printServerInfo(Integer port, String path) {
-        System.out.printf("""
-                --------------------------------------------------
-                | Server URL: http://localhost:%d              |
-                | Swagger URL: http://localhost:%d%s/swagger-ui/index.html  |
-                --------------------------------------------------
-                %n""", port, port, path);
-    }
-
 }
